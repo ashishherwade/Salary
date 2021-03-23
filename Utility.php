@@ -13,6 +13,7 @@ Class Utility
         $month = 1;
         $allMonthsProcessed = 0;
 
+
         while(!$allMonthsProcessed) {
             for ($month = 1; $month <= 12; $month++)
             {
@@ -60,12 +61,16 @@ Class Utility
                 $monthNum = $month;
                 $monthName = date('F', mktime(0, 0, 0, $monthNum, 10));
                 // Convert: Month Int to String
-                $temp = $monthName . ',' . $first . ',' . $second;
-
-                array_push($data, $temp);
-                $this->temp1 = $temp;
+                //$temp = $monthName . ',' . $first . ',' . $second;
+                //$this->temp1 = $temp;
+                //array_push($data, $temp);
+                $temp = array("Month"=>$monthName, "BonusDate" => $first, "PayDate"=>$second);
+                print_r(array_values($temp));
+                file_put_contents('aa.csv', var_export($temp, TRUE),FILE_APPEND);
+               // file_put_contents('aa.csv', print_r($temp, TRUE),FILE_APPEND);
             }
             $allMonthsProcessed = 1;
+
         }
 
     }
@@ -75,19 +80,14 @@ Class Utility
         return $this->temp1;
     }
 }
-$data =  array('Month,BonusDate,PayDate');
 
 $showData= new Utility();
 $showData->calculateSalaryAndBonusDay();
-echo $showData->getDate();
+//echo $showData->getDate();
 parse_str($argv[1], $_GET);
 $fileName = $_GET['filename']. '.' ."csv";
 $myfile = fopen($fileName, "w") or die("Unable to open file!");
 
-foreach ($showData as $line) {
-    $val = explode(",", $line);
-    fputcsv($myfile, $val);
-}
 fclose($myfile);
 
 
