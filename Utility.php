@@ -7,7 +7,8 @@ Class Utility
 
     public function calculateSalaryAndBonusDay()
     {
-        $data =  array('Month,BonusDate,PayDate');
+        $data =  "Month,BonusDate,PayDate"."\n";
+        file_put_contents('SalaryDates.csv', print_r($data, TRUE),FILE_APPEND);
         $date = date("d-m-Y");
         $curerntYear = date("Y");
         $month = 1;
@@ -58,16 +59,12 @@ Class Utility
                 } else {
                     $second = $lastDateOfMonth;
                 }
+                // Convert: Month Int to String
                 $monthNum = $month;
                 $monthName = date('F', mktime(0, 0, 0, $monthNum, 10));
-                // Convert: Month Int to String
-                //$temp = $monthName . ',' . $first . ',' . $second;
-                //$this->temp1 = $temp;
-                //array_push($data, $temp);
-                $temp = array("Month"=>$monthName, "BonusDate" => $first, "PayDate"=>$second);
-                print_r(array_values($temp));
-                file_put_contents('aa.csv', var_export($temp, TRUE),FILE_APPEND);
-               // file_put_contents('aa.csv', print_r($temp, TRUE),FILE_APPEND);
+                $temp = $monthName.','. $first.','. $second."\n" ;
+                file_put_contents('SalaryDates.csv', print_r($temp, TRUE),FILE_APPEND);
+
             }
             $allMonthsProcessed = 1;
 
@@ -83,11 +80,11 @@ Class Utility
 
 $showData= new Utility();
 $showData->calculateSalaryAndBonusDay();
-//echo $showData->getDate();
+
+/*
 parse_str($argv[1], $_GET);
 $fileName = $_GET['filename']. '.' ."csv";
 $myfile = fopen($fileName, "w") or die("Unable to open file!");
-
-fclose($myfile);
+fclose($myfile); */
 
 
