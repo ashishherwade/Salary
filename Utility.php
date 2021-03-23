@@ -77,11 +77,11 @@ Class Utility
         return $this->temp1;
     }
 }
-
+/*
 $showData= new Utility();
 $showData->calculateSalaryAndBonusDay();
 
-/*
+
 parse_str($argv[1], $_GET);
 $fileName = $_GET['filename']. '.' ."csv";
 $myfile = fopen($fileName, "w") or die("Unable to open file!");
