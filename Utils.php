@@ -44,25 +44,29 @@ class Utils
     }
 
     /**
-     * @param $curerntYear
+     * @param $currentYear
      * @param $month
      * @return string
      */
-    private function calculateBonusDate($curerntYear, $month)
+    private function calculateBonusDate($currentYear, $month)
     {
         // start: bonus date code
-        $defaultBonusDate = 15;
-        $defaultBonusDateWithMonthAndYear = $curerntYear . '-' . $month . '-' . $defaultBonusDate;
+        $bonusDate = 15;
+
+        $defaultBonusDateWithMonthAndYear = $this->getYearMonthDateString($currentYear, $month+1, $bonusDate);
         //Is 15th a weekday?
         $normalizedWeekday = $this->getNormalizedWeekday($defaultBonusDateWithMonthAndYear);
         $finalBonusDateWithMonthAndYear = $defaultBonusDateWithMonthAndYear;
         if ($normalizedWeekday == "saturday") { //check if wednesday
-            $newBonusDay = $defaultBonusDate + 4;
-            $finalBonusDateWithMonthAndYear = $curerntYear . '-' . $month . '-' . $newBonusDay;
+            $bonusDate = $bonusDate + 4;
 
         } elseif ($normalizedWeekday == "sunday") {
-            $newBonusDay = $defaultBonusDate + 3;
-            $finalBonusDateWithMonthAndYear = $curerntYear . '-' . $month . '-' . $newBonusDay;
+            $bonusDate = $bonusDate + 3;
+        }
+        if ($month == 12) {
+            $finalBonusDateWithMonthAndYear = $this->getYearMonthDateString($currentYear+1, 1, $bonusDate);
+        } else {
+            $finalBonusDateWithMonthAndYear = $this->getYearMonthDateString($currentYear, $month+1, $bonusDate);
         }
         return $finalBonusDateWithMonthAndYear;
     }
@@ -89,18 +93,16 @@ class Utils
         // number of days in that month
         $numberOfDaysInThisMonth = cal_days_in_month(CAL_GREGORIAN, $month, $currentYear);
         //form the date
-        $lastDateOfMonth = $currentYear . '-' . $month . '-' . $numberOfDaysInThisMonth;
+        $lastDateOfMonth = $this->getYearMonthDateString($currentYear, $month, $numberOfDaysInThisMonth);
         $normalizedWeekend = $this->getNormalizedWeekend($lastDateOfMonth);
         $finalSalaryDateWithMonthAndYear = $lastDateOfMonth;
         if ($normalizedWeekend == "saturday") {
             $newPayDay = $numberOfDaysInThisMonth - 1;
-            $newPayDate = $currentYear . '-' . $month . '-' . $newPayDay;
-            $finalSalaryDateWithMonthAndYear = $newPayDate;
+            $finalSalaryDateWithMonthAndYear = $this->getYearMonthDateString($currentYear, $month, $newPayDay);
         } elseif ($normalizedWeekend == "sunday") {
 
             $newPayDay = $numberOfDaysInThisMonth - 2;
-            $newPayDate = $currentYear . '-' . $month . '-' . $newPayDay;
-            $finalSalaryDateWithMonthAndYear = $newPayDate;
+            $finalSalaryDateWithMonthAndYear = $this->getYearMonthDateString($currentYear, $month, $newPayDay);
         }
         return $finalSalaryDateWithMonthAndYear;
     }
@@ -134,4 +136,9 @@ class Utils
         $recordForThisMonth = $monthName . ',' . $finalBonusDateWithMonthAndYear . ',' . $finalSalaryDateWithMonthAndYear . "\n";
         file_put_contents($fileName, print_r($recordForThisMonth, TRUE), FILE_APPEND);
     }
+
+    private function getYearMonthDateString($year, $month, $date) {
+        return $year . '-' . $month . '-' . $date;
+    }
+
 }

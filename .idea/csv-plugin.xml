@@ -80,6 +80,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/Utils.php">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/aa.csv">
           <value>
             <Attribute>
